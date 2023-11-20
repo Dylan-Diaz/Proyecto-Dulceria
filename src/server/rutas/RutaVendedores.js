@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const ModeloVendedor = require('../modelos/ModeloVendedores')
+const ModeloVendedor = require('../modelos/ModeloVendedores.js')
 
 router.post('/registerE',
             async(req,res)=>{
@@ -22,8 +22,7 @@ router.post('/registerE',
                 .status(201)
                 .json({
                     sucess:true,
-                    msg:"usuario creado exitosamente",
-                    token: user.ObtenerTokenJWT()
+                    msg:"usuario creado exitosamente"
                 })
                 } catch (error) {
                     res

@@ -24,10 +24,6 @@ const userSchema = new mongoose.Schema(
         },
         correo:{
             type: String,
-            match: [
-                /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/,
-                "correo no valido"
-            ]
         },
         usuario:{
             type:String,

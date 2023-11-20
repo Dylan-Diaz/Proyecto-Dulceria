@@ -1,6 +1,17 @@
 .text_A{
     text-decoration: none;
 }
+.mensajeExito{
+    border: solid 1px rgb(53, 224, 1);
+    background-color: rgb(53, 224, 1);
+    padding: 10px;
+}
+.mensajeE{
+    border: solid 1px rgb(252, 3, 3);
+    background-color: rgb(252, 3, 3);
+    color: rgb(255, 255, 255);
+    padding: 10px;
+}
 .fondoPagina{
     display: flex;
     justify-content: end;

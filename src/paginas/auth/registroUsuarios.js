@@ -30,7 +30,6 @@ const Registro = () => {
                     </div>
                     <div className='bodyNavR'>
                         <div className='textoRegister'><h4>Para crear tu cuenta te pediremos algunos datos</h4></div>
-                        <Link className='botonRE' to={'/registerC'}>Crear cuenta personal</Link>
                         <Link className='botonRE' to={'/registerE'}>Crear cuenta empresa</Link>
                         <Link className='text_decoration1' to={'/'}>Atras</Link>
                     </div>

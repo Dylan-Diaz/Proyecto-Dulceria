@@ -9,13 +9,12 @@ const puerto = process.env.EXPRESS_PORT || 8888;
 
 app.use(cors());
 
-const mongoURL = process.env.MONGO_URL || 'mongodb://localhost:27017/MiDulceriaOnline';
+const mongoURL = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/MiDulceriaOnline';
 mongoose.connect(mongoURL,{
-    useNewUrlParser: true,
-    useUnifieldTopology:true,
+    useNewUrlParser: true
 })
 
-    .then(() => console.log('Conectando a con la base de datos'.bgCyan.black))
+    .then(() => console.log('Conectado a la db'.bgCyan.black))
     .catch(error => console.error('Error al conectar con la base de datos:', error.message));
 
 app.use(express.json());
