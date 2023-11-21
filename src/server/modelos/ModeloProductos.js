@@ -4,6 +4,9 @@ const jwt = require('jsonwebtoken')
 
 const productoSchema = new mongoose.Schema(
     {
+        imagenProducto:{
+            type:File,
+        },
         descripcion:{
             type:String,
         },

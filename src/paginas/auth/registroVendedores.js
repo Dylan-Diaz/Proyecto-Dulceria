@@ -43,12 +43,13 @@ const RegistroE = () => {
             }
         }
     };
-
     const onChange = (e) => {
         setUsuario({
             ...user,
             [e.target.name]: e.target.value
         });
+
+        mostrarImagenSeleccionada();
     }
 
 
@@ -131,7 +132,7 @@ const RegistroE = () => {
                                     </div>
                                 </div>
                                 <div className='col-sm-6'>
-                                    {/* <div id="contenedorImg" className='contenedorImg'>
+                                    <div id="contenedorImg" className='contenedorImg'>
                                         <div className='textoImg'>
                                             <p>Logo Empresa</p>
                                             <p className='blue'><u>Opcional</u></p>
@@ -140,8 +141,8 @@ const RegistroE = () => {
 
                                     </div>
                                     <div className="input-group mt-3">
-                                        <input type="file" value={logoEmpresa} name='logoEmpresa' className='form-control' id="archivoInput" onChange={mostrarImagenSeleccionada} />
-                                    </div> */}
+                                        <input type="file" value={logoEmpresa} name='logoEmpresa' className='form-control' id="archivoInput" onChange={onChange} />
+                                    </div> 
                                 </div>
                             </div>
                         </div>

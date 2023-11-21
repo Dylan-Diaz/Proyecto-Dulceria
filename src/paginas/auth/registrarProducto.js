@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { mostrarImagenSeleccionada } from '../../js/imagenRegistroE';
 import axios from 'axios';
 
 const RegistrarP = () => {
     const [producto, setProducto] = useState({
+        imagenProducto:'',
         descripcion: '',
         precio: '',
         categoria: '',
         region: ''
       });
     
-      const{descripcion, precio, categoria, region} =producto;
+      const{imagenProducto,descripcion, precio, categoria, region} =producto;
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     
@@ -45,6 +47,7 @@ const RegistrarP = () => {
           ...producto,
           [e.target.name]: e.target.value
         });
+        mostrarImagenSeleccionada()
       };
     
     
@@ -94,9 +97,9 @@ const RegistrarP = () => {
                     <form method='post' onSubmit={onSubmit}>
                         <div className='groupP'>
                             <div className='imgEspacio'>
-                                <img src='/img/achiras.jpg' width={258}></img>
+                                <img id="imagenSeleccionada" className='imgP' src='#' width={258}></img>
                                 <div className="input-group mt-3">
-                                    <input type="file" value={''} name='logoEmpresa' className='form-control' id="archivoInput" />
+                                    <input type="file" value={imagenProducto} name='logoEmpresa' className='form-control' id="archivoInput" onChange={onChange}/>
                                 </div>
                             </div>
                             <div className='camposP'>

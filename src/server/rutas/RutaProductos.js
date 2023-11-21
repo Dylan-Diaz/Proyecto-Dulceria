@@ -10,12 +10,12 @@ router.post('/registerP',
                 try {
                     const productos = await productosModel.create(express.request.body)
 
-                    response.status(201).json({
+                    res.status(201).json({
                         "success": true,
                         msg:"producto creado con exito"
                     })
                 } catch (error) {
-                    response.status(500).json({
+                    res.status(500).json({
                         success: false,
                         msg: error.message
                     })
