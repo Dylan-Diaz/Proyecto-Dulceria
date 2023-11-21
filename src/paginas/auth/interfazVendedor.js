@@ -27,9 +27,9 @@ const Vendedor = () => {
                         <p><b>Nombre Empresa</b></p>
                     </div>
                     <nav>
-                        <Link className='activo'><b>Mis Productos</b></Link>
+                        <Link className='activo' to={'/InterVende'}><b>Mis Productos</b></Link>
                         <Link><b>Ventas</b></Link>
-                        <Link><b>Registrar Producto</b></Link>
+                        <Link to={'/registrarP'}><b>Registrar Producto</b></Link>
                         <Link><b>Cerrar Sesion</b></Link>
                     </nav>
                     <label for='btn-menu'>×</label>
@@ -63,11 +63,11 @@ const Vendedor = () => {
                             <p className='precio'><b>$ 2.000</b></p>
                             <div className='form-group col-sm-12'>
                                 <div className='row'>
-                                    <div className='col-sm-7'>
-                                        <p>Ramo</p>
+                                    <div className='col-sm-6'>
+                                        <input type='submit' className='btn btn-primary' value={'Editar'}></input>
                                     </div>
-                                    <div className='col-sm-5'>
-                                        <Link className='verMas' data-bs-toggle="modal" data-bs-target="#staticBackdrop">Ver mas</Link>
+                                    <div className='col-sm-6'>
+                                        <input type='submit' className='btn btn-danger' value={'Eliminar'}></input>
                                     </div>
                                 </div>
                             </div>
@@ -84,11 +84,11 @@ const Vendedor = () => {
                             <p className='precio'><b>$ 2.000</b></p>
                             <div className='form-group col-sm-12'>
                                 <div className='row'>
-                                    <div className='col-sm-7'>
-                                        <p>Ramo</p>
+                                    <div className='col-sm-6'>
+                                        <input type='submit' className='btn btn-primary' value={'Editar'}></input>
                                     </div>
-                                    <div className='col-sm-5'>
-                                        <Link className='verMas' data-bs-toggle="modal" data-bs-target="#staticBackdrop">Ver mas</Link>
+                                    <div className='col-sm-6'>
+                                        <input type='submit' className='btn btn-danger' value={'Eliminar'}></input>
                                     </div>
                                 </div>
                             </div>
@@ -105,11 +105,11 @@ const Vendedor = () => {
                             <p className='precio'><b>$ 1.500</b></p>
                             <div className='form-group col-sm-12'>
                                 <div className='row'>
-                                    <div className='col-sm-7'>
-                                        <p>Mis dulces Artesanales</p>
+                                    <div className='col-sm-6'>
+                                        <input type='submit' className='btn btn-primary' value={'Editar'}></input>
                                     </div>
-                                    <div className='col-sm-5'>
-                                        <Link className='verMas' data-bs-toggle="modal" data-bs-target="#staticBackdrop">Ver mas</Link>
+                                    <div className='col-sm-6'>
+                                        <input type='submit' className='btn btn-danger' value={'Eliminar'}></input>
                                     </div>
                                 </div>
                             </div>
@@ -127,11 +127,11 @@ const Vendedor = () => {
                             <p className='precio'><b>$ 1.500</b></p>
                             <div className='form-group col-sm-12'>
                                 <div className='row'>
-                                    <div className='col-sm-7'>
-                                        <p>Mis dulces Artesanales</p>
+                                    <div className='col-sm-6'>
+                                        <input type='submit' className='btn btn-primary' value={'Editar'}></input>
                                     </div>
-                                    <div className='col-sm-5'>
-                                        <Link className='verMas' data-bs-toggle="modal" data-bs-target="#staticBackdrop">Ver mas</Link>
+                                    <div className='col-sm-6'>
+                                        <input type='submit' className='btn btn-danger' value={'Eliminar'}></input>
                                     </div>
                                 </div>
                             </div>

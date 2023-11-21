@@ -73,13 +73,15 @@ const RegistroE = () => {
             </nav>
 
             {successMessage && (
-                <div className='alert alert-danger alert-dismissible fade show'>
-                    {successMessage}
+                <div className="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong></strong>{successMessage}
+                    <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close" />
                 </div>
             )}
             {error && (
-                <div className='alert alert-danger alert-dismissible fade show'>
-                    {error}
+                <div className="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong></strong>{error}
+                    <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close" />
                 </div>
             )}
 
@@ -160,7 +162,7 @@ const RegistroE = () => {
                             <div className='row'>
                                 <div className='col-sm-4'>
                                     <div className="form-floating mb-3">
-                                        <input type="text" value={usuario} name='usuario' className="form-control" id="floatingInput" placeholder="name@example.com" required  onChange={onChange} />
+                                        <input type="text" value={usuario} name='usuario' className="form-control" id="floatingInput" placeholder="name@example.com" required onChange={onChange} />
                                         <label htmlFor="floatingInput">Usuario Nuevo</label>
                                     </div>
                                 </div>

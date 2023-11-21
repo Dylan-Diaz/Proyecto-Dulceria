@@ -20,27 +20,24 @@ const Login = () => {
     const datosLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8888/api/v1/devcamps/users/login', {
+            const response = await axios.post('https://127.0.0.1:8888/api/v1/devcamps/users/login', {
                 usuario,
                 password: contrasena,
-                
+
             });
-            setSuccessMessage('Usuario creado con éxito');
-            setError('');
+            console.log('Después de la solicitud')
+
             if (response.data && response.data.token) {
                 const tokenPayload = parseToken(response.data.token);
                 if (tokenPayload) {
-                    const { name, token, numeroDoc } = tokenPayload;
-                    if (tokenPayload) {
-                        localStorage.setItem('token', token);
-                        localStorage.setItem('name', name)
-                        localStorage.setItem('numeroDoc', numeroDoc)
-                        navigate('/InterVende');
-                    } 
+                    const { nombreEmpresa, token } = tokenPayload;
+                    localStorage.setItem('token', token);
+                    localStorage.setItem('nombreEmpresa', nombreEmpresa)
+                    navigate('/InterVende');
                 }
             }
             setError('');
-        } 
+        }
         catch (error) {
             console.error('Error en el inicio de sesión:', error);
 
@@ -61,6 +58,19 @@ const Login = () => {
                         </div>
                         <h1>MiDulceOnline</h1>
                     </div>
+
+                    {successMessage && (
+                        <div className="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong></strong>{successMessage}
+                            <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close" />
+                        </div>
+                    )}
+                    {error && (
+                        <div className="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong></strong>{error}
+                            <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close" />
+                        </div>
+                    )}
 
                     <div className="login">
                         <div className="titulo">
@@ -107,20 +117,8 @@ const Login = () => {
                                     <label htmlFor="floatingPassword">Contraseña</label>
                                 </div>
                                 <br />
-                                {successMessage && (
-                                    <div className='mensajeExito'>
-                                        {successMessage}
-                                    </div>
-                                )}
-                                {error && (
-                                    <div className='alert alert-danger alert-dismissible fade show'>
-                                        {error}
-                                    </div>
-                                )}
                                 <br />
-                                <button type="submit" className="btn btn-primary">
-                                    Ingresar
-                                </button>
+                                <input type="submit" className="btn btn-primary" value={'Ingresar'}></input>
                                 <Link className="text_A" to={"/"}>
                                     Atras
                                 </Link>
@@ -150,7 +148,7 @@ const Login = () => {
                             </div>
                             <Link className="text_A" to="/register">
                                 <div className="buttonR">
-                                    <i class="bi bi-person-add"></i>
+                                    <i className="bi bi-person-add"></i>
                                     <botton>Registrarse</botton>
                                 </div>
                             </Link>

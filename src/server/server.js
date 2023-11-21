@@ -22,6 +22,11 @@ app.use(express.json());
 const vendedoresRouter = require('./rutas/RutaVendedores');
 app.use('/api/v1/devcamps/users', vendedoresRouter);
 
+const productosRouter = require('./rutas/RutaProductos');
+app.use('/api/v1/devcamps/productos', productosRouter);
+
+
 app.listen(puerto, () => {
     console.log(`El servidor se ha iniciado en el puerto ${puerto}`.bgMagenta.white)
 })
+

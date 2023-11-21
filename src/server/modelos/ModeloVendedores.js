@@ -44,9 +44,9 @@ userSchema.method.ObtenerTokenJWT = function(){
     const JWT_SECRET_KEY = "una troca salio de durango, a las 2 o 3 de la mañana"
     return jwt.sign({
         id: this._id,
-        name: this.name,
+        nombreEmpresa: this.nombreEmpresa,
         contrasena: this.contrasena,
-        role: this.role
+        NIT: this.NIT
     },
         JWT_SECRET_KEY,
         {
