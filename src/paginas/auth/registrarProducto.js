@@ -19,7 +19,7 @@ const RegistrarP = () => {
       const registerCita = async () => {
         try {
     
-          const response = await axios.post('http://localhost:8888/api/v1/devcamps/productos', producto, {
+          const response = await axios.post('https://localhost:8888/api/v1/devcamps/productos', producto, {
             headers: {
             'Content-Type': 'application/json',
     },

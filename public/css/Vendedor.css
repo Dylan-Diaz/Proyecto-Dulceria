@@ -277,3 +277,7 @@
         border-radius: 30px;
     }
 }
+.groupPL{
+    display: flex;
+    padding: 25px;
+}

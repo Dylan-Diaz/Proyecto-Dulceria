@@ -64,7 +64,7 @@ const Vendedor = () => {
                             <div className='form-group col-sm-12'>
                                 <div className='row'>
                                     <div className='col-sm-6'>
-                                        <input type='submit' className='btn btn-primary' value={'Editar'}></input>
+                                        <input type='submit' className='btn btn-primary' value={'Editar'} data-bs-toggle="modal" data-bs-target="#exampleModal"></input>
                                     </div>
                                     <div className='col-sm-6'>
                                         <input type='submit' className='btn btn-danger' value={'Eliminar'}></input>
@@ -85,7 +85,7 @@ const Vendedor = () => {
                             <div className='form-group col-sm-12'>
                                 <div className='row'>
                                     <div className='col-sm-6'>
-                                        <input type='submit' className='btn btn-primary' value={'Editar'}></input>
+                                        <input type='submit' className='btn btn-primary' value={'Editar'} data-bs-toggle="modal" data-bs-target="#exampleModal"></input>
                                     </div>
                                     <div className='col-sm-6'>
                                         <input type='submit' className='btn btn-danger' value={'Eliminar'}></input>
@@ -106,7 +106,7 @@ const Vendedor = () => {
                             <div className='form-group col-sm-12'>
                                 <div className='row'>
                                     <div className='col-sm-6'>
-                                        <input type='submit' className='btn btn-primary' value={'Editar'}></input>
+                                        <input type='submit' className='btn btn-primary' value={'Editar'} data-bs-toggle="modal" data-bs-target="#exampleModal"></input>
                                     </div>
                                     <div className='col-sm-6'>
                                         <input type='submit' className='btn btn-danger' value={'Eliminar'}></input>
@@ -128,7 +128,7 @@ const Vendedor = () => {
                             <div className='form-group col-sm-12'>
                                 <div className='row'>
                                     <div className='col-sm-6'>
-                                        <input type='submit' className='btn btn-primary' value={'Editar'}></input>
+                                        <input type='submit' className='btn btn-primary' value={'Editar'} data-bs-toggle="modal" data-bs-target="#exampleModal"></input>
                                     </div>
                                     <div className='col-sm-6'>
                                         <input type='submit' className='btn btn-danger' value={'Eliminar'}></input>
@@ -139,6 +139,52 @@ const Vendedor = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Modal */}
+            <div className="modal fade" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog modal-lg modal-dialog-centered">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h1 className="modal-title fs-5" id="exampleModalLabel">Editar</h1>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+                        </div>
+                        <div className="modal-body">
+                        <div className='groupPL'>
+                            <div className='imgEspacio'>
+                                <img id="imagenSeleccionada" className='imgP' src='#' width={258}></img>
+                                <div className="input-group mt-3">
+                                    <input type="file" value={''} name='logoEmpresa' className='form-control' id="archivoInput"/>
+                                </div>
+                            </div>
+                            <div className='camposP'>
+                                <div className="form-floating mb-3">
+                                    <input type="text" value={''} name='descripcion' className="form-control" id="floatingInput" placeholder="name@example.com" required/>
+                                    <label htmlFor="floatingInput">Descripcion Producto</label>
+                                </div>
+                                <div className="form-floating mb-3">
+                                    <input type="number" value={''} name='precio' className="form-control" id="floatingInput" placeholder="name@example.com" required/>
+                                    <label htmlFor="floatingInput">Precio</label>
+                                </div>
+                                <div className="form-floating mb-3">
+                                    <input type="text" value={''} name='categoria' className="form-control" id="floatingInput" placeholder="name@example.com" required/>
+                                    <label htmlFor="floatingInput">Categoria</label>
+                                </div>
+                                <div className="form-floating mb-3">
+                                    <input type="text" value={''} name='region' className="form-control" id="floatingInput" placeholder="name@example.com" required/>
+                                    <label htmlFor="floatingInput">Region Producto</label>
+                                </div>
+                                <hr></hr>
+                            </div>
+                        </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" className="btn btn-primary">Actualizar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     );
 }
