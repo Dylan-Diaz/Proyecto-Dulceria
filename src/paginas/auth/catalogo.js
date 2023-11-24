@@ -110,7 +110,7 @@ const Catalogo = () => {
                                         <p>Ramo</p>
                                     </div>
                                     <div className='col-sm-5'>
-                                        <Link className='verMas' data-bs-toggle="modal" data-bs-target="#staticBackdrop">Ver mas</Link>
+                                        <Link className='verMas'>Ver mas</Link>
                                     </div>
                                 </div>
                             </div>     
@@ -131,7 +131,7 @@ const Catalogo = () => {
                                         <p>Ramo</p>
                                     </div>
                                     <div className='col-sm-5'>
-                                        <Link className='verMas' data-bs-toggle="modal" data-bs-target="#staticBackdrop">Ver mas</Link>
+                                        <Link to={'/compra'} className='verMas'>Ver mas</Link>
                                     </div>
                                 </div>
                             </div>
@@ -152,7 +152,7 @@ const Catalogo = () => {
                                         <p>Mis dulces Artesanales</p>
                                     </div>
                                     <div className='col-sm-5'>
-                                        <Link className='verMas' data-bs-toggle="modal" data-bs-target="#staticBackdrop">Ver mas</Link>
+                                        <Link to={'/compra'} className='verMas'>Ver mas</Link>
                                     </div>
                                 </div>
                             </div>
@@ -174,10 +174,31 @@ const Catalogo = () => {
                                         <p>Mis dulces Artesanales</p>
                                     </div>
                                     <div className='col-sm-5'>
-                                        <Link className='verMas' data-bs-toggle="modal" data-bs-target="#staticBackdrop">Ver mas</Link>
+                                        <Link to={'/compra'} className='verMas'>Ver mas</Link>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div className="producto">
+                        <img src='/img/Ramo.png' className='imgVendedor' width={50}></img>
+                        <div className='img'>
+                            <img src='/img/achiras.jpg' width={230} height={270}></img>
+                        </div>
+                        <div className='cardBody'>
+                            <p className='tituloCard'>Paquete de achiras el gran tolima 50gr</p>
+                            <p className='precio'><b>$ 2.000</b></p>
+                            <div className='form-group col-sm-12'>
+                                <div className='row'>
+                                    <div className='col-sm-7'>
+                                        <p>Ramo</p>
+                                    </div>
+                                    <div className='col-sm-5'>
+                                        <Link className='verMas'>Ver mas</Link>
+                                    </div>
+                                </div>
+                            </div>     
                         </div>
                     </div>
                 </div>

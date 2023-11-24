@@ -129,11 +129,27 @@
     border-left: solid 5px transparent;
     transition: all 400ms ease;
 }
+.cont-menu nav button{
+    display: flex;
+    justify-content: start;
+    text-decoration: none;
+    border: none;
+    width: 100%;
+    padding: 20px;
+    color: rgba(0, 0, 0);
+    background-color: rgb(255, 255, 255);
+    border-left: solid 5px transparent;
+    transition: all 400ms ease;
+}
 .cont-menu nav .activo{
     border-left: solid 5px rgb(131, 0, 0);
     background: rgb(231, 231, 231);
 }
 .cont-menu nav a:hover{
+    border-left: solid 5px rgb(131, 0, 0);
+    background: rgb(231, 231, 231);
+}
+.cont-menu nav button:hover{
     border-left: solid 5px rgb(131, 0, 0);
     background: rgb(231, 231, 231);
 }

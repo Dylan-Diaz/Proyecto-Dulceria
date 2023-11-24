@@ -20,10 +20,9 @@ const Login = () => {
     const datosLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('https://127.0.0.1:8888/api/v1/devcamps/users/login', {
+            const response = await axios.post('http://127.0.0.1:8888/api/v1/devcamps/users/login', {
                 usuario,
-                password: contrasena,
-
+                contrasena: contrasena,
             });
             console.log('Después de la solicitud')
 
@@ -59,12 +58,6 @@ const Login = () => {
                         <h1>MiDulceOnline</h1>
                     </div>
 
-                    {successMessage && (
-                        <div className="alert alert-danger alert-dismissible fade show" role="alert">
-                            <strong></strong>{successMessage}
-                            <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close" />
-                        </div>
-                    )}
                     {error && (
                         <div className="alert alert-danger alert-dismissible fade show" role="alert">
                             <strong></strong>{error}
@@ -119,7 +112,7 @@ const Login = () => {
                                 <br />
                                 <br />
                                 <input type="submit" className="btn btn-primary" value={'Ingresar'}></input>
-                                <Link className="text_A" to={"/"}>
+                                <Link className="text_b" to={"/"}>
                                     Atras
                                 </Link>
                                 <br />
@@ -146,12 +139,10 @@ const Login = () => {
                                 </svg>
                                 <div className="line" />
                             </div>
-                            <Link className="text_A" to="/register">
-                                <div className="buttonR">
-                                    <i className="bi bi-person-add"></i>
-                                    <botton>Registrarse</botton>
-                                </div>
-                            </Link>
+                            <div className="buttonR">
+                                <i className="bi bi-person-add"></i>
+                                <Link className="text_A" to="/register">Registrarse</Link>
+                            </div>  
                         </form>
                     </div>
                 </div>

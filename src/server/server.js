@@ -11,13 +11,16 @@ app.use(cors());
 
 const mongoURL = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/MiDulceriaOnline';
 mongoose.connect(mongoURL,{
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
 })
 
     .then(() => console.log('Conectado a la db'.bgCyan.black))
     .catch(error => console.error('Error al conectar con la base de datos:', error.message));
 
 app.use(express.json());
+
+const Image = mongoose.model('Image', { data: Buffer });
 
 const vendedoresRouter = require('./rutas/RutaVendedores');
 app.use('/api/v1/devcamps/users', vendedoresRouter);

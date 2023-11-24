@@ -6,6 +6,8 @@ import Registro from './paginas/auth/registroUsuarios';
 import RegistroE from './paginas/auth/registroVendedores';
 import Vendedor from './paginas/auth/interfazVendedor';
 import RegistrarP from './paginas/auth/registrarProducto';
+import Ventas from './paginas/auth/ventas';
+import Compra from './paginas/auth/registrarCompra';
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
               <Route path="/registerE" element={<RegistroE/>}></Route>
               <Route path="/InterVende" element={<Vendedor/>}></Route>
               <Route path="/registrarP" element={<RegistrarP/>}></Route>
+              <Route path="/ventas" element={<Ventas/>}></Route>
+              <Route path="/compra" element={<Compra/>}></Route>
           </Routes>
       </Router>
    </Fragment>

@@ -1,11 +1,17 @@
 const mongoose = require('mongoose')
-const bcryptjs = require('bcryptjs')
-const jwt = require('jsonwebtoken')
 
 const productoSchema = new mongoose.Schema(
-    {
+    {   
+        nombre:{
+            type:String,
+        },
+        tipoProducto:{
+            type:String,
+        },
         imagenProducto:{
-            type:File,
+            name:String,
+            data:Buffer,
+            contentType:String
         },
         descripcion:{
             type:String,
@@ -13,8 +19,17 @@ const productoSchema = new mongoose.Schema(
         precio:{
             type:String,
         },
-        categoria:{
+        cantidadContenido:{
             type:String,
+        },
+        tipoContenido:{
+            type:String,
+            enum:[
+                "g",
+                "Kg",
+                "mL",
+                "L"
+            ]
         },
         region:{
             type:String,
@@ -22,4 +37,5 @@ const productoSchema = new mongoose.Schema(
     }
 )
 
-const productos = module.exports = mongoose.model('Productos',productoSchema)
+const Producto = 
+module.exports = mongoose.model('Producto',productoSchema)

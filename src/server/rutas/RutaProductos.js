@@ -6,21 +6,23 @@ const router = express.Router()
 
 
 router.post('/registerP', 
-            async(req, res)=>{
+            async(request, response)=>{
                 try {
-                    const productos = await productosModel.create(express.request.body)
+                    const productos = await productosModel.create(request.body)
 
-                    res.status(201).json({
+                    response.status(201).json({
                         "success": true,
                         msg:"producto creado con exito"
                     })
                 } catch (error) {
-                    res.status(500).json({
+                    response.status(500).json({
                         success: false,
                         msg: error.message
                     })
                     
                 }
 })
+
+
 
 module.exports = router

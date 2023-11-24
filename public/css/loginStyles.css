@@ -1,5 +1,9 @@
 .text_A{
     text-decoration: none;
+    color: rgb(255, 255, 255);
+}
+.text_b{
+    text-decoration: none;
 }
 .mensajeExito{
     border: solid 1px rgb(53, 224, 1);
@@ -75,7 +79,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    color: rgb(255, 255, 255);
+    text-decoration: none;
+    color: rgb(255, 255, 255);  
     background-color: rgb(131, 0, 0);
     border: solid 1px rgb(131, 0, 0);
     padding: 3px 50px;

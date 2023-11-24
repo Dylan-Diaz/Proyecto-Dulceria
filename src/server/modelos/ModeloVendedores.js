@@ -20,7 +20,9 @@ const userSchema = new mongoose.Schema(
             type:String,
         },
         logoEmpresa:{
-            type:String,
+            name: String,
+            data:Buffer,
+            contentType:String
         },
         correo:{
             type: String,
@@ -40,11 +42,12 @@ userSchema.pre('save', async function (next){
 })
 
 
-userSchema.method.ObtenerTokenJWT = function(){
+userSchema.methods.ObtenerTokenJWT = function(){
     const JWT_SECRET_KEY = "una troca salio de durango, a las 2 o 3 de la mañana"
     return jwt.sign({
         id: this._id,
         nombreEmpresa: this.nombreEmpresa,
+        logoEmpresa: this.logoEmpresa,
         contrasena: this.contrasena,
         NIT: this.NIT
     },
@@ -55,7 +58,7 @@ userSchema.method.ObtenerTokenJWT = function(){
     )
 }
 
-userSchema.method.comparacionContrasena = async function(contrasena){
+userSchema.methods.comparacionContrasena = async function(contrasena){
     return await bcryptjs.compare(contrasena, this.contrasena)
 }
 

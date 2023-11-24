@@ -19,6 +19,7 @@
     border-radius: 20px;
     padding: 25px;
     margin: -10px;
+    margin-bottom: 30px;
 }
 .imgEspacio{
     display: flex;
@@ -44,4 +45,14 @@
     justify-content: center;
     align-items: center;
     margin-top: 10px;
+}
+.seleccionarTC{
+    height: 58px;
+    border: solid 1px rgb(226, 226, 226);
+    border-radius: 5px;
+    padding-left: 20px;
+    outline: none;
+}
+.seleccionarTC:focus{
+    filter: drop-shadow(1px 1px 3px rgb(1, 141, 255));
 }
