@@ -8,6 +8,8 @@ const Vendedor = ({ userName }) => {
     const nameE = localStorage.getItem('nombreEmpresa');
     const imgE = localStorage.getItem('logoEmpresa');
     const [productos, setProductos] = useState([]);
+    const [busqueda, setBusqueda]= useState("");
+    const [BuscarProducts, setBuscarProducts]= useState([]);
 
     const [mensajeExito, setMensajeExito] = useState("");
     const [productoSeleccionado, setProductoSeleccionado] = useState(null);
@@ -38,6 +40,7 @@ const Vendedor = ({ userName }) => {
             try {
                 const res = await axios.get(`http://localhost:8888/api/v1/devcamps/productos/vendedor/${nameE}`)
                 setProductos(res.data.products);
+                setBuscarProducts(res.data.products);
             } catch (error) {
                 console.error("Error al traer los productos:", error);
             }
@@ -45,6 +48,23 @@ const Vendedor = ({ userName }) => {
 
         traerProducts();
     }, []);
+
+    const filtrar=(Busqueda)=>{
+        var resultadoBusqueda=BuscarProducts.filter((elemento)=>{
+          if(elemento.tipoProducto.toString().toLowerCase().includes(Busqueda.toLowerCase())
+          || elemento.precio.toString().toLowerCase().includes(Busqueda.toLowerCase())
+          || elemento.region.toString().toLowerCase().includes(Busqueda.toLowerCase())
+          ){
+            return elemento;
+          }
+        });
+        setProductos(resultadoBusqueda);
+      }
+    
+      const handleChange=e=>{
+        setBusqueda(e.target.value);
+        filtrar(e.target.value);
+      }
 
 
     //Actualizar producto
@@ -147,12 +167,12 @@ const Vendedor = ({ userName }) => {
                     <h3><b>Mis Productos</b></h3>
                 </div>
                 <div>
-                    <select className='buscarSelect' name='buscar'>
+                    {/*<select className='buscarSelect' name='buscar'>
                         <option value='categoria'>Categoria</option>
                         <option value='region'>Region</option>
                         <option value='precios'>Precios</option>
-                    </select>
-                    <input type='text' className='buscarInput' name='search' placeholder='Buscar' required></input>
+                    </select>*/}
+                    <input type='text' className='buscarInput' value={busqueda} name='search' placeholder='Buscar por tipo producto, precio y region' required onChange={handleChange}></input>
                     <button className='buscarBotonV'>Buscar</button>
                 </div>
             </div>

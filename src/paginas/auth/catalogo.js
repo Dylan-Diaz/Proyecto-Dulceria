@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 
 const Catalogo = () => {
     const [productos, setProductos] = useState([]);
+    const [busqueda, setBusqueda]= useState("");
+    const [BuscarProducts, setBuscarProducts]= useState([]);
 
     useEffect(() => {
         const traerProducts = async () => {
             try {
                 const res = await axios.get("http://localhost:8888/api/v1/devcamps/productos")
                 setProductos(res.data.results);
+                setBuscarProducts(res.data.results);
             } catch (error) {
                 console.error("Error al traer los productos:", error);
             }
@@ -17,6 +20,24 @@ const Catalogo = () => {
 
         traerProducts();
     }, []);
+
+
+    const filtrar=(Busqueda)=>{
+        var resultadoBusqueda=BuscarProducts.filter((elemento)=>{
+          if(elemento.tipoProducto.toString().toLowerCase().includes(Busqueda.toLowerCase())
+          || elemento.precio.toString().toLowerCase().includes(Busqueda.toLowerCase())
+          || elemento.region.toString().toLowerCase().includes(Busqueda.toLowerCase())
+          ){
+            return elemento;
+          }
+        });
+        setProductos(resultadoBusqueda);
+      }
+    
+      const handleChange=e=>{
+        setBusqueda(e.target.value);
+        filtrar(e.target.value);
+      }
 
     return (
         <div>
@@ -100,12 +121,12 @@ const Catalogo = () => {
                     <h3><b>Catalogo</b></h3>
                 </div>
                 <div className='BotonesC'>
-                    <select className='buscarSelect' name='buscar'>
+                    {/*<select className='buscarSelect' name='buscar'>
                         <option value='categoria'>Categoria</option>
                         <option value='region'>Region</option>
                         <option value='precios'>Precios</option>
-                    </select>
-                    <input type='text' className='buscarInput' name='search' placeholder='Buscar' required></input>
+                    </select>*/}
+                    <input type='text' className='buscarInput' value={busqueda} name='search' placeholder='Buscar por tipo producto, precio y region' onChange={handleChange} required></input>
                     <button className='buscarBoton'>Buscar</button>
                 </div>
             </div>

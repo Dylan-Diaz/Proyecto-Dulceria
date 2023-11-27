@@ -7,6 +7,8 @@ const Ventas = ({ userName }) => {
     const nameE = localStorage.getItem('nombreEmpresa');
     const imgE = localStorage.getItem('logoEmpresa');
     const [productos, setProductos] = useState([]);
+    const [busqueda, setBusqueda]= useState("");
+    const [BuscarProducts, setBuscarProducts]= useState([]);
 
     const handleLogout = () => {
         // Limpiar localStorage al cerrar sesión
@@ -22,6 +24,7 @@ const Ventas = ({ userName }) => {
             try {
                 const res = await axios.get(`http://localhost:8888/api/v1/devcamps/ventas/traer/${nameE}`)
                 setProductos(res.data.products);
+                setBuscarProducts(res.data.products)
             } catch (error) {
                 console.error("Error al traer las Ventas:", error);
             }
@@ -29,6 +32,21 @@ const Ventas = ({ userName }) => {
 
         traerProducts();
     }, []);
+
+    const filtrar=(Busqueda)=>{
+        var resultadoBusqueda=BuscarProducts.filter((elemento)=>{
+          if(elemento.nombreProducto.toString().toLowerCase().includes(Busqueda.toLowerCase())
+          ){
+            return elemento;
+          }
+        });
+        setProductos(resultadoBusqueda);
+      }
+    
+      const handleChange=e=>{
+        setBusqueda(e.target.value);
+        filtrar(e.target.value);
+      }
 
 
     return (
@@ -70,19 +88,14 @@ const Ventas = ({ userName }) => {
                     <h3><b>Mis Ventas</b></h3>
                 </div>
                 <div>
-                    <select className='buscarSelect' name='buscar'>
-                        <option value='categoria'>Fecha</option>
-                        <option value='region'>Hora</option>
-                        <option value='precios'>Producto</option>
-                    </select>
-                    <input type='text' className='buscarInput' name='search' placeholder='Buscar' required></input>
+                    <input type='text' className='buscarInput' name='search' value={busqueda} placeholder='Buscar por nombre del producto' onChange={handleChange} required></input>
                     <button className='buscarBotonV'>Buscar</button>
                 </div>
             </div>
 
 
-            <div className='containerV'>
-                {productos.map((producto) => (
+            <div className=''>
+                
                     <table class="table table-striped tablaV">
                     <thead className='table-dark'>
                         <tr>
@@ -98,24 +111,24 @@ const Ventas = ({ userName }) => {
                             <th scope="col">Metodo de Pago</th>
                         </tr>
                     </thead>
+                    {productos.map((producto) => (
                     <tbody>
                         <tr>
-                            <th scope="row">1</th>
-                            <td>{producto.nombre}</td>
-                            <td>{producto.apellido}</td>
-                            <td>{producto.apellido}</td>
+                            <th scope="row" key={producto._id}></th>
+                            <td>{producto.nombreCliente}</td>
+                            <td>{producto.apellidoCliente}</td>
                             <td>{producto.tipoDocumento}</td>
                             <td>{producto.numeroDocumento}</td>
                             <td>{producto.correo}</td>
                             <td>{producto.telefono}</td>
-                            <td>{producto.producto}</td>
+                            <td>{producto.nombreProducto}</td>
                             <td>{producto.numeroUnidades}</td>
                             <td>{producto.metodoPago}</td>
-                            <td>{producto.nombreProducto}</td>
                         </tr>
                     </tbody>
+                    ))}
                 </table>
-                ))}
+                
             </div>
 
         </div>

@@ -23,7 +23,7 @@ router.post('/registerV', async (req, res) => {
 });
 
 
-router.get('traer/:nombreEmpresa', async(req, res)=>{
+router.get('/traer/:nombreEmpresa', async(req, res)=>{
 
     const nombreE = req.params.nombreEmpresa;
     try {
@@ -37,7 +37,7 @@ router.get('traer/:nombreEmpresa', async(req, res)=>{
         }
   
         // Filtrar los productos asociados al usuario
-        const products = await productosModel.find({ nombreEmpresa: venta.nombreEmpresa });
+        const products = await VentaModelo.find({ nombreEmpresa: venta.nombreEmpresa });
   
         res.status(200).json({
             success: true,
