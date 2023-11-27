@@ -1,12 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from "axios";
 import { mostrarImagenSeleccionada } from '../../js/imagenRegistroE';
 
 const Vendedor = ({ userName }) => {
     const navigate = useNavigate();
     const nameE = localStorage.getItem('nombreEmpresa');
     const imgE = localStorage.getItem('logoEmpresa');
-    const [imagenSeleccionada, setImagenSeleccionada] = useState(null);
+    const [productos, setProductos] = useState([]);
+
+    const [mensajeExito, setMensajeExito] = useState("");
+    const [productoSeleccionado, setProductoSeleccionado] = useState(null);
+    const [nuevaInformacion, setNuevaInformacion] = useState({
+        nombre: '',
+        tipoProducto: '',
+        imagenProducto: '',
+        descripcion: '',
+        precio: '',
+        cantidadContenido: '',
+        tipoContenido: '',
+        region: ''
+    });
 
     const handleLogout = () => {
         // Limpiar localStorage al cerrar sesión
@@ -16,9 +30,86 @@ const Vendedor = ({ userName }) => {
         // Puedes usar useHistory() o Link para redirigir según tu configuración de enrutamiento
         navigate('/')
     };
+
+
+    // Listar por nombre empresa
+    useEffect(() => {
+        const traerProducts = async () => {
+            try {
+                const res = await axios.get(`http://localhost:8888/api/v1/devcamps/productos/vendedor/${nameE}`)
+                setProductos(res.data.products);
+            } catch (error) {
+                console.error("Error al traer los productos:", error);
+            }
+        };
+
+        traerProducts();
+    }, []);
+
+
+    //Actualizar producto
+    const handleEditarProducto = (producto) => {
+        setProductoSeleccionado(producto);
+        setNuevaInformacion({
+            nombre: producto.nombre,
+            tipoProducto: producto.tipoProducto,
+            descripcion: producto.descripcion,
+            precio: producto.precio,
+            cantidadContenido: producto.cantidadContenido,
+            tipoContenido: producto.tipoContenido,
+            region: producto.region
+        });
+    };
+    const handleActualizarProducto = async () => {
+        try {
+            await axios.put(`http://localhost:8888/api/v1/devcamps/productos/${productoSeleccionado._id}`, nuevaInformacion);
+            const updatedProductos = productos.map((producto) => {
+                if (producto._id === productoSeleccionado._id) {
+                    return {
+                        ...producto,
+                        ...nuevaInformacion
+                    };
+                }
+                return producto;
+            });
+
+            setProductos(updatedProductos);
+            setMensajeExito("Producto actualizado con éxito.");
+        } catch (error) {
+            console.error("Error al actualizar el producto:", error);
+        }
+    };
+
+    const handleChangeNuevaInformacion = (e) => {
+        setNuevaInformacion({
+          ...nuevaInformacion,
+          [e.target.name]: e.target.value
+        });
+        mostrarImagenSeleccionada()
+      };
+      const handleCerrarMensajeExito = () => {
+        setMensajeExito("");
+      };
+
+    
+    // Eliminar producto
+    const EliminarProducto = async (productoId) => {
+        const confirmacion = window.confirm("¿Estás seguro de que deseas eliminar este producto?");
+        if (confirmacion) {
+          try {
+            await axios.delete(`http://localhost:8888/api/v1/devcamps/productos/${productoId}`);
+            const updatedProductos = productos.filter((producto) => producto._id !== productoId);
+            setProductos(updatedProductos);
+            setMensajeExito("Producto eliminado con éxito.");
+          } catch (error) {
+            console.error("Error al eliminar el producto:", error);
+          }
+        }
+      };
+
     return (
         <div className='interfazVendedor'>
-            <meta charSet="UTF-8"/>
+            <meta charSet="UTF-8" />
             <nav>
                 <div className='nav'>
                     <div className='tituloNav'>
@@ -26,11 +117,7 @@ const Vendedor = ({ userName }) => {
                     </div>
                     <div className="iconoPerfil">
                         <h5 className='nombreE'>{nameE}</h5>
-                        <label className='botonPerfil' for='btn-menu'><img style={{
-                            backgroundImage: `url(${imagenSeleccionada})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                        }} className='imgPerfil' width={50}></img></label>
+                        <label className='botonPerfil' for='btn-menu'><img className='imgPerfil' src='/img/avatar.png' width={50}></img></label>
                     </div>
                 </div>
                 <div className='red'></div>
@@ -42,11 +129,7 @@ const Vendedor = ({ userName }) => {
             <div className='container-menu'>
                 <div className='cont-menu'>
                     <div className='cabezeraDesple'>
-                        <img style={{
-                            backgroundImage: `url(${imagenSeleccionada})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                        }} className='imgDesple'></img>
+                        <img className='imgDesple' src='/img/avatar.png'></img>
                         <p><b>{nameE}</b></p>
                     </div>
                     <nav>
@@ -74,137 +157,105 @@ const Vendedor = ({ userName }) => {
                 </div>
             </div>
 
+
             <div className='contenedorCards'>
                 <div className="containerCards">
-                    <div className="producto">
-                        <img src='/img/Ramo.png' className='imgVendedor' width={50}></img>
-                        <div className='img'>
-                            <img src='/img/achiras.jpg' width={230} height={270}></img>
-                        </div>
-                        <div className='cardBody'>
-                            <p className='tituloCard'>Paquete de achiras el gran tolima 50gr</p>
-                            <p className='precio'><b>$ 2.000</b></p>
-                            <div className='form-group col-sm-12'>
-                                <div className='row'>
-                                    <div className='col-sm-6'>
-                                        <input type='submit' className='btn btn-primary' value={'Editar'} data-bs-toggle="modal" data-bs-target="#exampleModal"></input>
-                                    </div>
-                                    <div className='col-sm-6'>
-                                        <input type='submit' className='btn btn-danger' value={'Eliminar'}></input>
+
+                    {productos.map((producto, index) => (
+                        <><div className="producto">
+                            <input type='hidden' key={index}></input>
+                            <img src="/img/Ramo.png" className='imgVendedor' width={50}></img>
+                            <div className='img'>
+                                <img src="/img/achiras.jpg" width={230} height={270}></img>
+                            </div><div className='cardBody'>
+                                <p className='tituloCard'>{producto.tipoProducto} {producto.nombre} {producto.cantidadContenido}{producto.tipoContenido}</p>
+                                <p className='precio'><b>{producto.precio}</b></p>
+                                <div className='form-group col-sm-12'>
+                                    <div className='row'>
+                                        <div className='col-sm-6'>
+                                            <button className='btn btn-primary' data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleEditarProducto(producto)}>Editar</button>
+                                        </div>
+                                        <div className='col-sm-6'>
+                                            <button type='submit' className='btn btn-danger' onClick={() => EliminarProducto(producto._id)}>Eliminar</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        
+                        
 
-                    <div className="producto">
-                        <img src='/img/Ramo.png' className='imgVendedor' width={50}></img>
-                        <div className='img'>
-                            <img src='/img/achiras.jpg' width={230} height={270}></img>
-                        </div>
-                        <div className='cardBody'>
-                            <p className='tituloCard'>Paquete de achiras el gran tolima 50gr</p>
-                            <p className='precio'><b>$ 2.000</b></p>
-                            <div className='form-group col-sm-12'>
-                                <div className='row'>
-                                    <div className='col-sm-6'>
-                                        <input type='submit' className='btn btn-primary' value={'Editar'} data-bs-toggle="modal" data-bs-target="#exampleModal"></input>
-                                    </div>
-                                    <div className='col-sm-6'>
-                                        <input type='submit' className='btn btn-danger' value={'Eliminar'}></input>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        <div className="modal fade" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div className="modal-dialog modal-lg modal-dialog-centered">
+                                    {productoSeleccionado && (
+                                        <div className="modal-content">
+                                            <div className="modal-header">
+                                                <h1 className="modal-title fs-5" id="exampleModalLabel">Editar</h1>
+                                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+                                            </div>
+                                            <div className="modal-body">
+                                            {mensajeExito && (
+                                                <div className="alert alert-success alert-dismissible fade show" role="alert">
+                                                    <strong></strong>{mensajeExito}
+                                                    <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close" onClick={handleCerrarMensajeExito}/>
+                                                </div>
+                                            )}
+                                                <div className='groupPL'>
+                                                    <div className='imgEspacio'>
+                                                        <img id="imagenSeleccionada" className='imgP' src={producto.imagenProducto} width={258}></img>
+                                                        <div className="input-group mt-3">
+                                                            <input type="file" name='imagenProducto' className='form-control' id="archivoInput" onChange={handleChangeNuevaInformacion}/>
+                                                        </div>
+                                                    </div>
+                                                    <div className='camposP'>
+                                                        <div className="form-floating mb-3">
+                                                            <input type="text" value={nuevaInformacion.nombre} name='nombre' className="form-control" id="floatingInput" placeholder="name@example.com" required onChange={handleChangeNuevaInformacion}/>
+                                                            <label htmlFor="floatingInput">Nombre</label>
+                                                        </div>
+                                                        <div className="form-floating mb-3">
+                                                            <input type="text" value={nuevaInformacion.tipoProducto} name='tipoProducto' className="form-control" id="floatingInput" placeholder="name@example.com" required onChange={handleChangeNuevaInformacion}/>
+                                                            <label htmlFor="floatingInput">Tipo de producto</label>
+                                                        </div>
+                                                        <div className="form-floating mb-3">
+                                                            <input type="text" value={nuevaInformacion.descripcion} name='descripcion' className="form-control" id="floatingInput" placeholder="name@example.com" required onChange={handleChangeNuevaInformacion}/>
+                                                            <label htmlFor="floatingInput">Descripcion Producto</label>
+                                                        </div>
+                                                        <div className="input-group mb-3">
+                                                            <div className="form-floating input-group mb-3">
+                                                                <input type="text" value={nuevaInformacion.cantidadContenido} name='cantidadContenido' className="form-control" id="floatingInput" placeholder="name@example.com" required onChange={handleChangeNuevaInformacion}/>
+                                                                <label htmlFor="floatingInput">Cantidad Contenido</label>
+                                                            </div>
+                                                            <select name='tipoContenido' value={nuevaInformacion.tipoContenido} className="seleccionarTC" id="inputGroupSelect01" onChange={handleChangeNuevaInformacion}>
+                                                                <option value="">Seleccionar</option>
+                                                                <option value="g">Gramos</option>
+                                                                <option value="Kg">Kilos</option>
+                                                                <option value="mL">Mililitros</option>
+                                                                <option value="L">Litros</option>
+                                                            </select>
+                                                        </div>
+                                                        <div className="form-floating mb-3">
+                                                            <input type="number" value={nuevaInformacion.precio} name='precio' className="form-control" id="floatingInput" placeholder="name@example.com" required onChange={handleChangeNuevaInformacion}/>
+                                                            <label htmlFor="floatingInput">Precio</label>
+                                                        </div>
+                                                        <div className="form-floating mb-3">
+                                                            <input type="text" value={nuevaInformacion.region} name='region' className="form-control" id="floatingInput" placeholder="name@example.com" required onChange={handleChangeNuevaInformacion}/>
+                                                            <label htmlFor="floatingInput">Region Producto</label>
+                                                        </div>
+                                                        <hr></hr>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="modal-footer">
+                                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                                <button type="button" className="btn btn-primary" onClick={handleActualizarProducto}>Actualizar</button>
+                                            </div>
+                                        </div>
+                                    )}
 
-                    <div className="producto">
-                        <img src='/img/logo_fondo.png' className='imgVendedor' width={50}></img>
-                        <div className='img'>
-                            <img src="/img/bocadillo.jpg" width={230} height={270} />
-                        </div>
-                        <div className='cardBody'>
-                            <p className='tituloCard'>Bocadillo veleño por 12 unidades</p>
-                            <p className='precio'><b>$ 1.500</b></p>
-                            <div className='form-group col-sm-12'>
-                                <div className='row'>
-                                    <div className='col-sm-6'>
-                                        <input type='submit' className='btn btn-primary' value={'Editar'} data-bs-toggle="modal" data-bs-target="#exampleModal"></input>
-                                    </div>
-                                    <div className='col-sm-6'>
-                                        <input type='submit' className='btn btn-danger' value={'Eliminar'}></input>
-                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
+                            </div></>
+                    ))}
 
-
-                    <div className="producto">
-                        <img src='/img/logo_fondo.png' className='imgVendedor' width={50}></img>
-                        <div className='img'>
-                            <img src="/img/bocadillo.jpg" width={230} height={270} />
-                        </div>
-                        <div className='cardBody'>
-                            <p className='tituloCard'>Bocadillo veleño por 12 unidades</p>
-                            <p className='precio'><b>$ 1.500</b></p>
-                            <div className='form-group col-sm-12'>
-                                <div className='row'>
-                                    <div className='col-sm-6'>
-                                        <input type='submit' className='btn btn-primary' value={'Editar'} data-bs-toggle="modal" data-bs-target="#exampleModal"></input>
-                                    </div>
-                                    <div className='col-sm-6'>
-                                        <input type='submit' className='btn btn-danger' value={'Eliminar'}></input>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Modal */}
-            <div className="modal fade" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog modal-lg modal-dialog-centered">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="exampleModalLabel">Editar</h1>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-                        </div>
-                        <div className="modal-body">
-                            <div className='groupPL'>
-                                <div className='imgEspacio'>
-                                    <img id="imagenSeleccionada" className='imgP' src='#' width={258}></img>
-                                    <div className="input-group mt-3">
-                                        <input type="file" name='logoEmpresa' className='form-control' id="archivoInput" onChange={mostrarImagenSeleccionada} />
-                                    </div>
-                                </div>
-                                <div className='camposP'>
-                                    <div className="form-floating mb-3">
-                                        <input type="text" value={''} name='descripcion' className="form-control" id="floatingInput" placeholder="name@example.com" required />
-                                        <label htmlFor="floatingInput">Descripcion Producto</label>
-                                    </div>
-                                    <div className="form-floating mb-3">
-                                        <input type="number" value={''} name='precio' className="form-control" id="floatingInput" placeholder="name@example.com" required />
-                                        <label htmlFor="floatingInput">Precio</label>
-                                    </div>
-                                    <div className="form-floating mb-3">
-                                        <input type="text" value={''} name='categoria' className="form-control" id="floatingInput" placeholder="name@example.com" required />
-                                        <label htmlFor="floatingInput">Categoria</label>
-                                    </div>
-                                    <div className="form-floating mb-3">
-                                        <input type="text" value={''} name='region' className="form-control" id="floatingInput" placeholder="name@example.com" required />
-                                        <label htmlFor="floatingInput">Region Producto</label>
-                                    </div>
-                                    <hr></hr>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <button type="button" className="btn btn-primary">Actualizar</button>
-                        </div>
-                    </div>
                 </div>
             </div>
 

@@ -9,9 +9,8 @@ const productoSchema = new mongoose.Schema(
             type:String,
         },
         imagenProducto:{
-            name:String,
-            data:Buffer,
-            contentType:String
+           type:String,
+           required: true
         },
         descripcion:{
             type:String,
@@ -33,9 +32,12 @@ const productoSchema = new mongoose.Schema(
         },
         region:{
             type:String,
-        }
+        },
+        nombreEmpresa:{
+            type:String,
+        } 
     }
 )
 
-const Producto = 
-module.exports = mongoose.model('Producto',productoSchema)
+const Producto = mongoose.model('Producto', productoSchema);
+module.exports = Producto;

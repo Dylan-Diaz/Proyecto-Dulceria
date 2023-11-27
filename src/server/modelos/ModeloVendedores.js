@@ -20,9 +20,8 @@ const userSchema = new mongoose.Schema(
             type:String,
         },
         logoEmpresa:{
-            name: String,
-            data:Buffer,
-            contentType:String
+            type:String,
+            required: true
         },
         correo:{
             type: String,

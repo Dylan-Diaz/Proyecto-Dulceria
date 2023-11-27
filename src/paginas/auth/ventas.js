@@ -1,7 +1,36 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from "axios";
 
-const Ventas = () => {
+const Ventas = ({ userName }) => {
+    const navigate = useNavigate();
+    const nameE = localStorage.getItem('nombreEmpresa');
+    const imgE = localStorage.getItem('logoEmpresa');
+    const [productos, setProductos] = useState([]);
+
+    const handleLogout = () => {
+        // Limpiar localStorage al cerrar sesión
+        localStorage.removeItem('nombreEmpresa');
+        localStorage.removeItem('logoEmpresa')
+        // Redirigir a la página de inicio de sesión
+        // Puedes usar useHistory() o Link para redirigir según tu configuración de enrutamiento
+        navigate('/')
+    };
+
+    useEffect(() => {
+        const traerProducts = async () => {
+            try {
+                const res = await axios.get(`http://localhost:8888/api/v1/devcamps/ventas/traer/${nameE}`)
+                setProductos(res.data.products);
+            } catch (error) {
+                console.error("Error al traer las Ventas:", error);
+            }
+        };
+
+        traerProducts();
+    }, []);
+
+
     return (
         <div className='interfazVendedor'>
             <nav>
@@ -10,7 +39,7 @@ const Ventas = () => {
                         <b>MiDulceOnline</b>
                     </div>
                     <div className="iconoPerfil">
-                        <h5 className='nombreE'>Nombre Empresa</h5>
+                        <h5 className='nombreE'>{nameE}</h5>
                         <label className='botonPerfil' for='btn-menu'><img src='/img/avatar.png' className='imgPerfil' width={50}></img></label>
                     </div>
                 </div>
@@ -24,13 +53,13 @@ const Ventas = () => {
                 <div className='cont-menu'>
                     <div className='cabezeraDesple'>
                         <img src='/img/avatar.png' className='imgDesple'></img>
-                        <p><b>Nombre Empresa</b></p>
+                        <p><b>{nameE}</b></p>
                     </div>
                     <nav>
                         <Link to={'/InterVende'}><b>Mis Productos</b></Link>
                         <Link className='activo' to={'/ventas'}><b>Ventas</b></Link>
                         <Link to={'/registrarP'}><b>Registrar Producto</b></Link>
-                        <Link><b>Cerrar Sesion</b></Link>
+                        <button onClick={handleLogout}><b>Cerrar Sesion</b></button>
                     </nav>
                     <label for='btn-menu'>×</label>
                 </div>
@@ -53,7 +82,8 @@ const Ventas = () => {
 
 
             <div className='containerV'>
-                <table class="table table-striped tablaV">
+                {productos.map((producto) => (
+                    <table class="table table-striped tablaV">
                     <thead className='table-dark'>
                         <tr>
                             <th scope="col">#</th>
@@ -71,42 +101,21 @@ const Ventas = () => {
                     <tbody>
                         <tr>
                             <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
+                            <td>{producto.nombre}</td>
+                            <td>{producto.apellido}</td>
+                            <td>{producto.apellido}</td>
+                            <td>{producto.tipoDocumento}</td>
+                            <td>{producto.numeroDocumento}</td>
+                            <td>{producto.correo}</td>
+                            <td>{producto.telefono}</td>
+                            <td>{producto.producto}</td>
+                            <td>{producto.numeroUnidades}</td>
+                            <td>{producto.metodoPago}</td>
+                            <td>{producto.nombreProducto}</td>
                         </tr>
                     </tbody>
                 </table>
+                ))}
             </div>
 
         </div>

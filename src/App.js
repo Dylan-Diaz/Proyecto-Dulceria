@@ -21,7 +21,7 @@ function App() {
               <Route path="/InterVende" element={<Vendedor/>}></Route>
               <Route path="/registrarP" element={<RegistrarP/>}></Route>
               <Route path="/ventas" element={<Ventas/>}></Route>
-              <Route path="/compra" element={<Compra/>}></Route>
+              <Route path="/compra/:_id" element={<Compra/>}></Route>
           </Routes>
       </Router>
    </Fragment>

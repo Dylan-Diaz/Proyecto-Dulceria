@@ -1,7 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from "axios";
 
 const Catalogo = () => {
+    const [productos, setProductos] = useState([]);
+
+    useEffect(() => {
+        const traerProducts = async () => {
+            try {
+                const res = await axios.get("http://localhost:8888/api/v1/devcamps/productos")
+                setProductos(res.data.results);
+            } catch (error) {
+                console.error("Error al traer los productos:", error);
+            }
+        };
+
+        traerProducts();
+    }, []);
+
     return (
         <div>
             <nav>
@@ -96,28 +112,32 @@ const Catalogo = () => {
 
             <div className='contenedorCards'>
                 <div className="containerCards">
-                    <div className="producto">
-                        <img src='/img/Ramo.png' className='imgVendedor' width={50}></img>
-                        <div className='img'>
-                            <img src='/img/achiras.jpg' width={230} height={270}></img>
-                        </div>
-                        <div className='cardBody'>
-                            <p className='tituloCard'>Paquete de achiras el gran tolima 50gr</p>
-                            <p className='precio'><b>$ 2.000</b></p>
-                            <div className='form-group col-sm-12'>
-                                <div className='row'>
-                                    <div className='col-sm-7'>
-                                        <p>Ramo</p>
-                                    </div>
-                                    <div className='col-sm-5'>
-                                        <Link className='verMas'>Ver mas</Link>
-                                    </div>
-                                </div>
-                            </div>     
-                        </div>
-                    </div>
+                    {productos.map((producto, index) => (
+                        <div className="producto">
+                            <input type='hidden' key={index}></input>
+                            <img src="/img/Ramo.png" className='imgVendedor' width={50}></img>
+                            <><div className='img'>
+                                <img src='/img/achiras.jpg' width={230} height={270}></img>
+                            </div><div className='cardBody'>
+                                    <p className='tituloCard'>{producto.tipoProducto} {producto.nombre} {producto.cantidadContenido}{producto.tipoContenido}</p>
+                                    <p className='precio'><b>{producto.precio}</b></p>
 
-                    <div className="producto">
+                                    <div className='form-group col-sm-12'>
+                                        <div className='row'>
+                                            <div className='col-sm-7'>
+                                                <p>{producto.nombreEmpresa}</p>
+                                            </div>
+                                            <div className='col-sm-5'>
+                                                <Link to={`/compra/${producto._id}`} className='verMas'>Ver mas</Link>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div></>
+                        </div>
+                    ))}
+
+
+                    {/*<div className="producto">
                         <img src='/img/Ramo.png' className='imgVendedor' width={50}></img>
                         <div className='img'>
                             <img src='/img/achiras.jpg' width={230} height={270}></img>
@@ -198,9 +218,9 @@ const Catalogo = () => {
                                         <Link className='verMas'>Ver mas</Link>
                                     </div>
                                 </div>
-                            </div>     
+                            </div>
                         </div>
-                    </div>
+                        </div>*/}
                 </div>
             </div>
         </div>

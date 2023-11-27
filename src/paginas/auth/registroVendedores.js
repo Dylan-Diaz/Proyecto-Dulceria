@@ -10,7 +10,7 @@ const RegistroE = () => {
         telefonoContacto: '',
         nombreEmpresa: '',
         NIT: '',
-        logoEmpresa: '',
+        logoEmpresa:'',
         correo: '',
         usuario: '',
         contrasena: ''

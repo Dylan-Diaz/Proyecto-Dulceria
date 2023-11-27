@@ -1,64 +1,18 @@
 const express = require('express')
 const router = express.Router()
 const ModeloVendedor = require('../modelos/ModeloVendedores.js')
-const { v4: uuidv4 } = require('uuid'); // Utilizamos uuid para generar nombres únicos para las imágenes
-const { createReadStream, existsSync, mkdirSync, writeFileSync } = require('fs');
-const { join } = require('path');
 
-router.post('/registerE', async (req, res) => {
-    const {
-        nombreContacto,
-        cargo,
-        telefonoContacto,
-        nombreEmpresa,
-        NIT,
-        logoEmpresa,
-        correo,
-        usuario,
-        contrasena
-    } = req.body;
-
+router.post('/registerE', 
+async (req, res) => {
+    const {nombreContacto,cargo,telefonoContacto,nombreEmpresa,NIT,logoEmpresa,correo,usuario,contrasena} = req.body;
     try {
-        let logoEmpresaFileName = null;
-
-        // Verificar si se proporcionó una imagen
-        if (req.files && req.files.logoEmpresa) {
-            const logoEmpresa = req.files.logoEmpresa;
-
-            // Crear un directorio temporal para guardar la imagen (asegúrate de que este directorio exista)
-            const tempDir = join(__dirname, './img/', 'temp');
-            if (!existsSync(tempDir)) {
-                ensureDirSync(tempDir);
-                console.log(`Directorio temporal creado en: ${tempDir}`);
-            } else {
-                console.log(`El directorio temporal ya existe en: ${tempDir}`);
-            }
-
-            // Generar un nombre único para la imagen
-            logoEmpresaFileName = uuidv4() + '.png';
-            const logoEmpresaPath = join(tempDir, logoEmpresaFileName);
-
-            // Guardar la imagen en el sistema de archivos
-            logoEmpresa.mv(logoEmpresaPath, (err) => {
-                if (err) {
-                    return res.status(500).json({
-                        success: false,
-                        message: 'Error al guardar la imagen',
-                    });
-                }
-            });
-        }
-
-        const nombreImagen = logoEmpresa ? logoEmpresa.name : null;
-
-        // Crear el usuario en la base de datos
         const user = await ModeloVendedor.create({
             nombreContacto,
             cargo,
             telefonoContacto,
             nombreEmpresa,
             NIT,
-            logoEmpresa: nombreImagen,// Guardar el nombre de la imagen en la base de datos
+            logoEmpresa,
             correo,
             usuario,
             contrasena,  
@@ -76,6 +30,32 @@ router.post('/registerE', async (req, res) => {
         });
     }
 });
+
+
+
+
+router.get('/',
+    async(req,res)=>{
+        try {
+            const vendedores = await ModeloVendedor.find()
+            if (vendedores.length === 0) {
+                return res.status(404).json({
+                    success: false,
+                    msg:"No hay vendedores disponibles"
+                })
+            }
+            res.status(200).json({
+                "success":true,
+                "results":vendedores
+            })
+        } catch (error) {
+            res.status(500).json({
+                success:false,
+                msg:"Error interno del Servidor"
+            })
+        }
+    }
+);
 
 
 

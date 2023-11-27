@@ -1,9 +1,24 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { mostrarImagenSeleccionada } from '../../js/imagenRegistroE';
 import axios from 'axios';
 
-const RegistrarP = () => {
+
+const RegistrarP = ({ userName }) => {
+    const navigate = useNavigate();
+    const nameE = localStorage.getItem('nombreEmpresa');
+    const imgE = localStorage.getItem('logoEmpresa');
+
+    const handleLogout = () => {
+        // Limpiar localStorage al cerrar sesión
+        localStorage.removeItem('nombreEmpresa');
+        localStorage.removeItem('logoEmpresa')
+        // Redirigir a la página de inicio de sesión
+        // Puedes usar useHistory() o Link para redirigir según tu configuración de enrutamiento
+        navigate('/')
+    };
+
+
     const [producto, setProducto] = useState({
         nombre: '',
         tipoProducto: '',
@@ -12,14 +27,14 @@ const RegistrarP = () => {
         precio: '',
         cantidadContenido: '',
         tipoContenido: '',
-        region: ''
+        region: '',
+        nombreEmpresa: nameE
     });
-
-    const { nombre, tipoProducto, imagenProducto, descripcion, precio, cantidadContenido, tipoContenido, region } = producto;
+    const { nombre, tipoProducto, imagenProducto, descripcion, precio, cantidadContenido, tipoContenido, region, nombreEmpresa} = producto;
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
-    const registerCita = async () => {
+    const registerProducto = async () => {
         try {
 
             const response = await axios.post('http://localhost:8888/api/v1/devcamps/productos/registerP', producto, {
@@ -45,6 +60,34 @@ const RegistrarP = () => {
         }
     };
 
+    const guardarImagen = async () => {
+        try {
+            // Crear un objeto FormData para enviar la imagen
+            const formData = new FormData();
+            formData.append('imagenProducto', producto.imagenProducto);
+
+            // Realizar la solicitud POST con FormData
+            const res = await axios.post("http://localhost:8888/api/v1/devcamps/productos/guardar/single", formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',  // Importante establecer el tipo de contenido correcto para el envío de archivos
+                },
+            });
+        } catch (error) {
+            console.error('Error en el registro:', error);
+
+            if (error.response) {
+                console.log('Respuesta del servidor:', error.response);
+                if (error.response.status === 500 && error.response.data && error.response.data.message) {
+                    setError('Error: ' + error.response.data.message);
+                } else {
+                    setError('Error en el registro');
+                }
+            } else {
+                setError('Error en el : ' + error.message);
+            }
+        }
+    }
+
     const onChange = (e) => {
         setProducto({
             ...producto,
@@ -56,7 +99,8 @@ const RegistrarP = () => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        registerCita()
+        registerProducto()
+        guardarImagen()
     };
     return (
         <div className='interfazVendedor'>
@@ -66,7 +110,7 @@ const RegistrarP = () => {
                         <b>MiDulceOnline</b>
                     </div>
                     <div className="iconoPerfil">
-                        <h5 className='nombreE'>Nombre Empresa</h5>
+                        <h5 className='nombreE'>{nameE}</h5>
                         <label className='botonPerfil' htmlFor='btn-menu'><img src='/img/avatar.png' className='imgPerfil' width={50}></img></label>
                     </div>
                 </div>
@@ -79,14 +123,14 @@ const RegistrarP = () => {
             <div className='container-menu'>
                 <div className='cont-menu'>
                     <div className='cabezeraDesple'>
-                        <img src='/img/avatar.png' className='imgDesple'></img>
-                        <p><b>Nombre Empresa</b></p>
+                        <img src={imgE} className='imgDesple'></img>
+                        <p><b>{nameE}</b></p>
                     </div>
                     <nav>
                         <Link to={'/InterVende'}><b>Mis Productos</b></Link>
                         <Link to={'/ventas'}><b>Ventas</b></Link>
                         <Link className='activo' to={'/registrarP'}><b>Registrar Producto</b></Link>
-                        <Link><b>Cerrar Sesion</b></Link>
+                        <button onClick={handleLogout}><b>Cerrar Sesion</b></button>
                     </nav>
                     <label htmlFor='btn-menu'>×</label>
                 </div>
@@ -108,12 +152,12 @@ const RegistrarP = () => {
                     <div className='tituloRE'>
                         <h4>Registrar Productos</h4>
                     </div>
-                    <form method='post' onSubmit={onSubmit}>
+                    <form method='post' onSubmit={onSubmit} encType="multipart/form-data">
                         <div className='groupP'>
                             <div className='imgEspacio'>
                                 <img id="imagenSeleccionada" className='imgP' src='#' width={258}></img>
                                 <div className="input-group mt-3">
-                                    <input type="file" value={imagenProducto} name='imagenProducto' className='form-control' id="archivoInput" onChange={onChange} />
+                                    <input type="file" value={imagenProducto} name='imagenProducto' className='form-control' id="archivoInput" onChange={onChange}/>
                                 </div>
                             </div>
                             <div className='camposP'>
@@ -143,8 +187,6 @@ const RegistrarP = () => {
                                         <option value="L">Litros</option>
                                     </select>
                                 </div>
-
-
                                 <div className="form-floating mb-3">
                                     <input type="number" value={precio} name='precio' className="form-control" id="floatingInput" placeholder="name@example.com" required onChange={onChange} />
                                     <label htmlFor="floatingInput">Precio</label>
